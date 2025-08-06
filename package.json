@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
+    "module-alias": "^2.2.3",
+    "mysql2": "^3.14.2"
+  },
+  "_moduleAliases": {
+    "@": "src"
+  }
+}
