@@ -13,11 +13,11 @@ export async function getUserPassword(data, callback) {
     [dataObj.username, dataObj.password],
     function (err, results) {
       if (err) {
-        console.error('获取账号密码信息失败:', err);
-        return callback(err);
+        console.error('获取账号密码信息失败:', err)
+        return callback(err)
       } else {
-        console.log('获取账号密码信息成功:', results);
-        return callback(null,results);
+        console.log('获取账号密码信息成功:', results)
+        return callback(null,results)
       }
     })
 }
