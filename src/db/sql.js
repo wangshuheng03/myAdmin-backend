@@ -4,6 +4,6 @@ import mysql from 'mysql2'
 export const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '111111',
-  database: 'mysql',
+  password: 'wsh5201314.',
+  database: 'admin',
 })
