@@ -14,59 +14,64 @@ function buildTree(items, parentId = null) {
  * @returns {Array} - 菜单数组
  */
 export async function getSystemenuAll(data, callback) {
-  const dataObj = data
-  console.log('获取菜单数据:', dataObj, Object.keys(dataObj).length)
+  const dataObj = data;
+  console.log('获取菜单数据:', dataObj, Object.keys(dataObj).length);
   if (dataObj && Object.keys(dataObj).length !== 0) {
     try {
       /* 1. 拼模糊条件 */
-      let whereStr = ''
-      const params = []
+      let whereStr = '';
+      const params = [];
       for (const key in dataObj) {
         if (dataObj[key] !== undefined && dataObj[key] !== null) {
-          whereStr += ` AND ${key} LIKE ?`
-          params.push(`%${dataObj[key]}%`)
+          if (key === 'id') {
+            whereStr += ` AND ${key} = ?`;
+            params.push(dataObj[key]);
+          } else {
+            whereStr += ` AND ${key} LIKE ?`;
+            params.push(`%${dataObj[key]}%`);
+          }
         }
       }
       if (whereStr) {
-        whereStr = `WHERE 1=1 ${whereStr}`
+        whereStr = `WHERE 1=1 ${whereStr}`;
       }
 
       /* 2. 查所有菜单（扁平数组），并按照 menu_index 排序 */
       const [allRows] = await connection.promise().query(
         `SELECT * FROM sys_menu ${whereStr} ORDER BY menu_index ASC, parent_id ASC, order_num ASC, id ASC`,
         params
-      )
+      );
       const hitNodes = allRows.filter(r =>
         Object.keys(dataObj).every(k =>
           String(r[k]).toLowerCase().includes(String(dataObj[k]).toLowerCase())
         )
-      )
-      const id = hitNodes[0].id
-      if (!hitNodes.length) return callback(null, [])
+      );
+      const id = hitNodes[0].id;
+      if (!hitNodes.length) return callback(null, []);
 
-      const children = buildTree(allRows, id)
-      hitNodes[0].children = children
-      const result = hitNodes
-      console.log('结果:', result)
+      const children = buildTree(allRows, id);
+      hitNodes[0].children = children;
+      const result = hitNodes;
+      console.log('结果:', result);
 
-      return callback(null, result)
+      return callback(null, result);
     } catch (err) {
-      console.error('查询菜单失败:', err)
-      callback(err)
+      console.error('查询菜单失败:', err);
+      callback(err);
     }
   } else {
     connection.query(
       "SELECT * FROM sys_menu ORDER BY menu_index ASC, parent_id IS NULL DESC, parent_id ASC, order_num ASC, id ASC",
       function (err, results) {
         if (err) {
-          console.error('获取菜单失败:', err)
-          return callback(err)
+          console.error('获取菜单失败:', err);
+          return callback(err);
         } else {
-          console.log('获取菜单成功')
-          return callback(null, buildTree(results))
+          console.log('获取菜单成功');
+          return callback(null, buildTree(results));
         }
       }
-    )
+    );
   }
 }
 
