@@ -47,10 +47,10 @@ app.get('/system/user/checkToken', (req, res) => {
 
 // 请求拦截器
 app.use((req, res, next) => {
-  if (req.path === '/system/user/checkToken' || req.path === '/system/user/login' ||req.path === '/system/Role/menu/list') return next()
+  if (req.path === '/system/user/checkToken' || req.path === '/system/user/login' ||req.path === '/system/Role/menu/list' || req.path === '/__vite_ping') return next()
   const token = req.headers['x-access-token']
   if (!token) {
-    console.log('不存在token')
+    console.log(req.path,'不存在token')
     return next()
   } else {
     console.log('存在token',token)

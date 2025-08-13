@@ -6,7 +6,7 @@ import { connection } from '../sql.js'
  * @param {string} 获取流水信息的SQL语句
  * @returns {Array} - 流水数组
  */
-export async function getAccountStatement(data, callback) {
+export async function getManage(data, callback) {
   const dataObj = data
   console.log('获取账单信息:', dataObj)
 
@@ -24,7 +24,7 @@ export async function getAccountStatement(data, callback) {
   const offset      = (currentPage - 1) * pageSize
 
   // 3. 构建 SQL
-  const fields   = ['id', 'title', 'type', 'amount', 'useType', 'remark', 'expense_time']
+  const fields   = ['id', 'title', 'type', 'amount', 'remark', 'expense_time']
   const fieldStr = fields.join(', ')
   let whereStr   = 'WHERE 1=1'
   const params   = []
@@ -46,13 +46,13 @@ export async function getAccountStatement(data, callback) {
   try {
     // 查询列表
     const [rows] = await connection.promise().query(
-      `SELECT ${fieldStr} FROM account_statement ${whereStr} ORDER BY expense_time DESC LIMIT ? OFFSET ?`,
+      `SELECT ${fieldStr} FROM manage ${whereStr} ORDER BY expense_time DESC LIMIT ? OFFSET ?`,
       [...params, pageSize, offset]
     )
 
     // 统计总数
     const [totalRows] = await connection.promise().query(
-      `SELECT COUNT(*) AS total FROM account_statement ${whereStr}`,
+      `SELECT COUNT(*) AS total FROM manage ${whereStr}`,
       params
     )
 
@@ -68,12 +68,12 @@ export async function getAccountStatement(data, callback) {
  * @param {string} 插入流水信息的SQL语句
  * @returns {Array} - 菜单数组
  */
-export async function insertAccountStatement(data, callback) {
+export async function insertManage(data, callback) {
   const dataObj = data
   console.log('插入账单信息:', dataObj)
 
   // 定义插入字段
-  const fields = ['title', 'type', 'amount', 'expense_time', 'useType', 'remark']
+  const fields = ['title', 'type', 'amount', 'expense_time', 'remark']
   // 构建插入字段字符串
   const fieldStr = fields.join(', ')
   // 构建插入值字符串
@@ -81,8 +81,8 @@ export async function insertAccountStatement(data, callback) {
 
   try {
     const [result] = await connection.promise().query(
-      `INSERT INTO account_statement (${fieldStr}) VALUES (${valueStr})`,
-      [dataObj.title, dataObj.type, dataObj.amount, dataObj.expense_time, dataObj.useType, dataObj.remark]
+      `INSERT INTO manage (${fieldStr}) VALUES (${valueStr})`,
+      [dataObj.title, dataObj.type, dataObj.amount, dataObj.expense_time, dataObj.remark]
     )
 
     console.log('插入账单成功:', result)
@@ -99,18 +99,18 @@ export async function insertAccountStatement(data, callback) {
  * @returns {Array} - 菜单数组
  */
 
-export async function updateAccountStatement(data, callback) {
+export async function updateManage(data, callback) {
   const dataObj = data
   console.log('编辑账单信息:', dataObj)
 
   // 定义更新字段
-  const fields = ['title', 'type', 'amount', 'expense_time', 'useType', 'remark']
+  const fields = ['title', 'type', 'amount', 'expense_time', 'remark']
   // 构建更新字段字符串
   const setStr = fields.map(key => `${key} = ?`).join(', ')
   try {
     const [result] = await connection.promise().query(
-      `UPDATE account_statement SET ${setStr} WHERE id = ?`,
-      [dataObj.title, dataObj.type, dataObj.amount, dataObj.expense_time, data.useType, dataObj.remark,dataObj.id]
+      `UPDATE manage SET ${setStr} WHERE id = ?`,
+      [dataObj.title, dataObj.type, dataObj.amount, dataObj.expense_time, dataObj.remark,dataObj.id]
     )
 
     console.log('编辑账单成功:', result)
@@ -127,13 +127,13 @@ export async function updateAccountStatement(data, callback) {
  * @returns {Array} - 菜单数组
  */
 
-export async function deleteAccountStatement(data, callback) {
+export async function deleteManage(data, callback) {
   const dataObj = data
   console.log('删除账单信息:', dataObj)
 
   try {
     const [result] = await connection.promise().query(
-      `DELETE FROM account_statement WHERE id = ?`,
+      `DELETE FROM manage WHERE id = ?`,
       [dataObj.id]
     )
 
@@ -152,7 +152,7 @@ export async function deleteAccountStatement(data, callback) {
  */
 export async function getAccountStatementALl(data, callback) {
   try {
-    const [result] = await connection.promise().query('SELECT * FROM account_statement')
+    const [result] = await connection.promise().query('SELECT * FROM manage')
     console.log('获取所有账单信息:', result)
     return callback(null, result)
   }catch (err) {
