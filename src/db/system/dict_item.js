@@ -81,7 +81,7 @@ export async function updateDictItem(data, callback) {
   // 构建字段列表和占位符列表
   const setFields = keys.map((key) => `${key} = ?`).join(', ');
 
-  const sql = `UPDATE system_dict_item SET ${setFields} WHERE parent_id = ?`;
+  const sql = `UPDATE system_dict_item SET ${setFields} WHERE id = ?`;
   const parentId = data.id;
   const allValues = [...values, parentId];
 

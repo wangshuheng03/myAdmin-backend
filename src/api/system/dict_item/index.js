@@ -27,7 +27,7 @@ app.post('/system/dictItem/add',(req,res)=>{
   })
 })
 
-app.put('/system/dictItem/update',(req,res)=>{
+app.post('/system/dictItem/update',(req,res)=>{
   updateDictItem(req.body,(err,data)=>{
    if(err){
       console.error(err)
@@ -38,7 +38,7 @@ app.put('/system/dictItem/update',(req,res)=>{
   })
 })
 
-app.delete('/system/dictItem/delete',(req,res)=>{
+app.post('/system/dictItem/delete',(req,res)=>{
   deleteDictItem(req.body.id,(err,data)=>{
     if(err){
       console.error(err)
