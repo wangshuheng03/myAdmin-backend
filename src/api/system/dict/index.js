@@ -37,7 +37,7 @@ app.post('/system/dict/add',(req,res) => {
 //字典编辑接口
 app.post('/system/dict/edit',(req,res) => {
   const data = req.body
-  console.log(data,'BBBBBBBBBBBBBBBBBBBBB');
+  console.log(data,'BBBBBBBBBBBBBBBBBBBBB')
   
   editDictType(data, (err, results) => {
     if (err) {
