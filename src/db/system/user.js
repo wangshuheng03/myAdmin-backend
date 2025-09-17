@@ -21,3 +21,20 @@ export async function getUserPassword(data, callback) {
       }
     })
 }
+
+/**
+ * 递归函数来加载路由
+ * @param {string} 获取所有用户信息的SQL语句不查询密码
+ * @returns {Array} - 菜单数组
+ */
+export async function getUser(callback) {
+  connection.query( "SELECT id, username, nickname, email, role FROM system_user",
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching user data: ", error)
+        return callback(error, null)
+      }
+      callback(null, results)
+    }
+    )
+}
